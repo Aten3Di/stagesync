@@ -1,16 +1,42 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Percorso del file da spostare
-FILE="stagesync.py"
+# install_stagesync.sh - copia stagesync.py nella directory klipper extras
 
-# Directory di destinazione
+# Directory in cui si trova questo script (~/StageSync/klipper)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# File sorgente da installare
+SRC_FILE="$SCRIPT_DIR/stagesync.py"
+
+# Directory di destinazione nel firmware Klipper
 DEST_DIR="$HOME/klipper/klippy/extras"
+DEST_FILE="$DEST_DIR/stagesync.py"
 
-# Verifica se il file esiste
-if [ -f "$FILE" ]; then
-    # Sposta il file nella directory di destinazione
-    mv "$FILE" "$DEST_DIR"
-    echo "Il file $FILE è stato spostato in $DEST_DIR."
+# Verifica che il file sorgente esista
+if [ ! -f "$SRC_FILE" ]; then
+  echo "Errore: non trovo '$SRC_FILE'. Assicurati di essere nella directory corretta." >&2
+  exit 1
+fi
+
+# Verifica che la directory di destinazione esista
+if [ ! -d "$DEST_DIR" ]; then
+  echo "Errore: directory di destinazione '$DEST_DIR' non trovata." >&2
+  exit 1
+fi
+
+# Copia il file, sostituendo eventuale versione precedente
+if [ -f "$DEST_FILE" ]; then
+  echo "File esistente trovato in '$DEST_FILE', lo sostituisco..."
 else
-    echo "Errore: il file $FILE non esiste nella directory corrente."
+  echo "Installo stagesync.py in '$DEST_DIR'..."
+fi
+cp -f "$SRC_FILE" "$DEST_FILE"
+
+# Feedback finale
+if [ $? -eq 0 ]; then
+  echo "Installazione completata: '$DEST_FILE'"
+else
+  echo "Errore durante la copia di '$SRC_FILE'." >&2
+  exit 1
 fi
