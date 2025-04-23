@@ -61,13 +61,14 @@ class StageSync:
         try:
             # Synchronize temperatures on the first run
             self.sync_temperatures(self.last_target_temp)
-        except Exception as e:
+        except Exception:
             pass  # Removed logging of temperature synchronization error
 
     def check_event(self, eventtime):
         try:
             temp, target = self.heater.get_temp(eventtime)
-            if target is None or target <= 0.:
+            # Only skip if target is None. Allow target == 0 to pass through and sync stages to 0.
+            if target is None:
                 return eventtime + 1.0  # Retry after 1 second
 
             if target != self.last_target_temp:
@@ -75,17 +76,13 @@ class StageSync:
                 self.sync_temperatures(target)
 
             # Schedule the next check in 1 second
-            next_check_time = eventtime + 1.0
-            return next_check_time
+            return eventtime + 1.0
 
-        except Exception as e:
+        except Exception:
             return eventtime + 1.0  # Retry after 1 second
 
     def sync_temperatures(self, target):
-        if not self.heater:
-            return
-
-        if target is None:
+        if not self.heater or target is None:
             return
 
         # Apply the temperature to the stages using a G-code command
@@ -121,6 +118,7 @@ class StageSync:
         logging.error(msg)
         self.printer.invoke_shutdown(msg)
         return self.printer.get_reactor().NEVER
+
 
 def load_config_prefix(config):
     return StageSync(config)
