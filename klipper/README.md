@@ -4,25 +4,25 @@ Execute the following commands:
 - Clone and install the software
 ```
 cd  ~
-git clone https://github.com/Aten3Di/StageSync.git
+git clone https://github.com/Aten3Di/stagesync.git
 ```
 - run the installation script.
 ```
-~/StageSync/klipper/install_stagesync.sh
+./stagesync/klipper/install_stagesync.sh
 ```
 - Add the following section to moonraker.conf and you can update StageSync automatically.
 ```
-[update_manager StageSync]
+[update_manager stagesync]
 type: git_repo
 primary_branch: new
 channel: dev
-path: ~/StageSync
-origin: https://github.com/Aten3Di/StageSync.git
+path: ~/stagesync
+origin: https://github.com/Aten3Di/stagesync.git
 install_script: ./klipper/install_stagesync.sh
 is_system_service: False
 managed_services: klipper
 info_tags:
-  desc=StageSync
+  desc=stagesync
 ```
 
 # Configuration:
