@@ -1,5 +1,5 @@
-# StageSync allows you to define a main heater and synchronize additional
-# heaters to it by adding a temperature multiplier to each one.
+# StageSync is a Klipper plugin to synchronize secondary heaters 
+# with a primary one using temperature multipliers.
 #
 # #####.#####.#####. DISCLAIMER .#####.#####.#####
 # #####.##### ONLY FOR DEVELOPMENT USE! #####.#####
