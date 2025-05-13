@@ -1,7 +1,7 @@
-# StageSync allows you to define a main heater and synchronize additional
-# heaters to it by adding a temperature multiplier to each one.
+# StageSync is a Klipper plugin to synchronize secondary heaters 
+# with a primary one using temperature multipliers.
 #
-# Support for optimizing management of the Aten V-ONE hotend and similar.
+# Support for optimizing management of the Aten V-ONE hotend and similar devices.
 # more information at www.aten3d.com
 #
 # Copyright (C) 2024 Aten <info@aten3d.com>
@@ -13,7 +13,7 @@
 
 import logging
 
-class StageSync:
+class stagesync:
     def __init__(self, config):
         self.printer = config.get_printer()
         self.heater_name = config.get_name().split()[1]
@@ -41,7 +41,7 @@ class StageSync:
                     self.stages_fault(stage_name.strip())
                 
                 self.stages.append((stage, temp_ratio_value))
-                logging.info(f"StageSync stages: {stage_name.strip()} with temp_ratio: {temp_ratio.strip()}")
+                logging.info(f"stagesync stages: {stage_name.strip()} with temp_ratio: {temp_ratio.strip()}")
             except Exception as e:
                 self.mapping_fault(stage_name.strip(), e)
 
@@ -96,29 +96,29 @@ class StageSync:
                 logging.error(f"Temperature synchronization via G-code failed! {stage_name}: {e}")
 
     def ratio_fault(self, stage_name, temp_ratio_value):
-        msg = f"StageSync: temp_ratio for stage '{stage_name}' is out of bounds: {temp_ratio_value}"
+        msg = f"stagesync: temp_ratio for stage '{stage_name}' is out of bounds: {temp_ratio_value}"
         logging.error(msg)
         self.printer.invoke_shutdown(msg)
         return self.printer.get_reactor().NEVER
 
     def stages_fault(self, stage_name):
-        msg = f"StageSync: stage '{stage_name}' not found"
+        msg = f"stagesync: stage '{stage_name}' not found"
         logging.error(msg)
         self.printer.invoke_shutdown(msg)
         return self.printer.get_reactor().NEVER
 
     def heater_fault(self, heater_name, error):
-        msg = f"StageSync: Error initializing heater '{heater_name}': {error}"
+        msg = f"stagesync: Error initializing heater '{heater_name}': {error}"
         logging.error(msg)
         self.printer.invoke_shutdown(msg)
         return self.printer.get_reactor().NEVER
 
     def mapping_fault(self, stage_name, error):
-        msg = f"StageSync: Error mapping stage '{stage_name}': {error}"
+        msg = f"stagesync: Error mapping stage '{stage_name}': {error}"
         logging.error(msg)
         self.printer.invoke_shutdown(msg)
         return self.printer.get_reactor().NEVER
 
 
 def load_config_prefix(config):
-    return StageSync(config)
+    return stagesync(config)
