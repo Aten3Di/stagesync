@@ -43,3 +43,19 @@ Support for additional heaters synced to the temperatures of a primary heater (a
 #   2.00 (200%). This value is optional and if not defined a multiplier of 1.0
 #   will be applied.
 ```
+
+# G-code Commands:
+
+### STAGESYNC
+
+This G-code command forces immediate synchronization of all secondary heaters defined in `stagesync`.
+
+
+- **Description**  
+  No more waiting for periodic polling: just call `STAGESYNC` in the console or within a macro to instantly realign the secondary temperatures to the main heater target.
+
+- **Response in console**
+```
+Info: stagesync: manual trigger…
+Info: stagesync: update completed
+```
